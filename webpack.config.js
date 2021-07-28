@@ -1,10 +1,11 @@
-const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const JsDocPlugin = require('jsdoc-webpack-plugin');
 
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.NODE_ENV === 'production';
 const isDev = !isProd;
 
 const filename = (ext) => (isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`);
@@ -12,37 +13,37 @@ const filename = (ext) => (isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`);
 const jsLoaders = () => {
   const loaders = [
     {
-      loader: "babel-loader",
+      loader: 'babel-loader',
       options: {
-        presets: ["@babel/preset-env"],
+        presets: ['@babel/preset-env'],
       },
     },
   ];
 
   if (isDev) {
-    loaders.push("eslint-loader");
+    loaders.push('eslint-loader');
   }
 
   return loaders;
 };
 
 module.exports = {
-  target: isDev ? "web" : "browserslist",
-  context: path.resolve(__dirname, "src"),
-  mode: "development",
-  entry: "./index.js",
+  target: isDev ? 'web' : 'browserslist',
+  context: path.resolve(__dirname, 'src'),
+  mode: 'development',
+  entry: './index.js',
   output: {
-    filename: filename("js"),
-    path: path.join(__dirname, "dist"),
+    filename: filename('js'),
+    path: path.join(__dirname, 'dist'),
   },
   resolve: {
-    extensions: [".js"],
+    extensions: ['.js'],
     alias: {
-      "@": path.join(__dirname, "src"),
-      "@core": path.join(__dirname, "src/core"),
+      '@': path.join(__dirname, 'src'),
+      '@core': path.join(__dirname, 'src/core'),
     },
   },
-  devtool: isDev ? "source-map" : false,
+  devtool: isDev ? 'source-map' : false,
   devServer: {
     // contentBase: 'dist',
     port: 3000,
@@ -51,7 +52,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "index.html",
+      template: 'index.html',
       minify: {
         removeComments: isProd,
         collapseWhitespace: isProd,
@@ -61,14 +62,15 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.join(__dirname, "src/favicon.ico"),
-          to: path.join(__dirname, "dist"),
+          from: path.join(__dirname, 'src/favicon.ico'),
+          to: path.join(__dirname, 'dist'),
         },
       ],
     }),
     new MiniCssExtractPlugin({
-      filename: filename("css"),
+      filename: filename('css'),
     }),
+    new JsDocPlugin(),
   ],
   module: {
     rules: [
@@ -86,8 +88,8 @@ module.exports = {
             //   hmr: isDev
             // }
           },
-          "css-loader",
-          "sass-loader",
+          'css-loader',
+          'sass-loader',
         ],
       },
     ],
