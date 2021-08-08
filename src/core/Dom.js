@@ -47,6 +47,14 @@ class Dom {
     return this;
   }
 
+  closest(selector) {
+    return $(this.element.closest(selector));
+  }
+
+  getCoords() {
+    return this.element.getBoundingClientRect();
+  }
+
   /**
    * Добавляет слушатель на событие переданное в качестве аргумента
    * @param {string} eventType - тип события
