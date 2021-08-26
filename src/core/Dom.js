@@ -55,6 +55,28 @@ class Dom {
     return this.element.getBoundingClientRect();
   }
 
+  get data() {
+    return this.element.dataset;
+  }
+
+  addClass(className) {
+    this.element.classList.add(className);
+  }
+
+  removeClass(className) {
+    this.element.classList.remove(className);
+  }
+
+  findAll(selector) {
+    return [...this.element.querySelectorAll(selector)].map((el) => $(el));
+  }
+
+  css(styles = {}) {
+    Object.keys(styles).forEach(
+      (prop) => (this.element.style[prop] = styles[prop]),
+    );
+  }
+
   /**
    * Добавляет слушатель на событие переданное в качестве аргумента
    * @param {string} eventType - тип события

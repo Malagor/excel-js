@@ -12,7 +12,7 @@
   .row {
     display: flex;
     flex-direction: row;
-    min-height: 20px;
+    min-height: $min-row-height;
     height: $row-height;
   }
 
@@ -26,6 +26,7 @@
     border: 1px solid $border-color;
     background: #f8f9fa;
     border-top: none;
+    user-select: none;
   }
 
   .row-data {
@@ -38,16 +39,17 @@
     justify-content: center;
     align-items: center;
     background: #f8f9fa;
-    min-width: 40px;
+    min-width: $min-column-width;
     width: $cell-width;
     border: 1px solid $border-color;
     border-top: 0;
     border-left: 0;
     height: 100%;
+    user-select: none;
   }
 
   .cell {
-    min-width: 40px;
+    min-width: $min-column-width;
     padding: 5px;
     width: $cell-width;
     height: 100%;
@@ -57,6 +59,7 @@
     color: #111;
     white-space: nowrap;
     outline: none;
+    overflow: hidden;
 
     &.selected {
       border: none;
@@ -64,16 +67,20 @@
       z-index: 2;
     }
   }
+
   .col-resize,
   .row-resize {
     position: absolute;
     bottom: 0;
     right: 0;
     border-radius: 2px;
-    transition: 0.2s;
+    transition: opacity 0.2s;
+    opacity: 0;
+    background-color: $primary-color;
+    z-index: 1000;
 
     &:hover {
-      background-color: $primary-color;
+      opacity: 1;
     }
   }
 
@@ -93,5 +100,28 @@
     &:hover {
       cursor: row-resize;
     }
+  }
+
+  .active {
+    opacity: 1;
+
+    &::after {
+      position: absolute;
+      content: '';
+
+      background: $primary-color;
+    }
+  }
+
+  .row-resize.active::after {
+    height: 1px;
+    bottom: 1px;
+    width: 5000px;
+  }
+
+  .col-resize.active::after {
+    width: 1px;
+    right: 1px;
+    height: 5000px;
   }
 }
