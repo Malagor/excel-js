@@ -67,6 +67,10 @@ class Dom {
     this.element.classList.remove(className);
   }
 
+  find(selector) {
+    return $(this.element.querySelector(selector));
+  }
+
   findAll(selector) {
     return [...this.element.querySelectorAll(selector)].map((el) => $(el));
   }
