@@ -67,6 +67,17 @@ class Dom {
     this.element.classList.remove(className);
   }
 
+  id(parse = true) {
+    if (parse) {
+      const parsed = this.element.dataset.id.split(':');
+      return {
+        row: +parsed[0],
+        col: +parsed[1],
+      };
+    }
+    return this.data.id;
+  }
+
   find(selector) {
     return $(this.element.querySelector(selector));
   }

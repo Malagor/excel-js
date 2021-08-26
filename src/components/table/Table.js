@@ -2,9 +2,12 @@ import { ExcelComponent } from '@core/ExcelComponent';
 import { createTable } from '@/components/table/table.template';
 import { resizeHandler } from '@/components/table/table.resizer';
 import { $ } from '@core/Dom';
-import { isCell, shouldResize } from '@/components/table/table.functions';
+import {
+  findCellsForSelect,
+  isCell,
+  shouldResize,
+} from '@/components/table/table.functions';
 import { TableSelection } from '@/components/table/TableSelection';
-import { findCellsForSelect } from '@/components/table/table.findCellForSelect';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';
@@ -35,13 +38,15 @@ export class Table extends ExcelComponent {
       resizeHandler(event, this.$root);
     } else if (isCell(event)) {
       const $el = $(event.target);
+
       if (event.shiftKey) {
-        const cellsArray = findCellsForSelect(
-          this.selection.group[0],
+        const $cells = findCellsForSelect(
+          this.selection.current,
           $el,
           this.$root,
         );
-        this.selection.selectGroup(cellsArray);
+
+        this.selection.selectGroup($cells);
       } else {
         this.selection.select($el);
       }

@@ -8,12 +8,13 @@ export class TableSelection {
   select($el) {
     this.clear();
     this.group.push($el);
+    this.current = $el;
     $el.addClass(TableSelection.className);
   }
 
-  selectGroup(cellsArray) {
+  selectGroup($cellsArray = []) {
     this.clear();
-    this.group = [...cellsArray];
+    this.group = [...$cellsArray];
     this.group.forEach(($el) => $el.addClass(TableSelection.className));
   }
 
