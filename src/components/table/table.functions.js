@@ -58,47 +58,33 @@ export function isSelectKey(keyCode) {
 }
 
 /**
- * Обрабатывает выделение ячейки с помощью клавиатуры
+ * Высчитывает ID следующей выделяемой ячейки
  *
  * @param {Number} keyCode
- * @param {TableSelection} selection
- * @param {Dom} $root
+ * @param {Dom} $current
+ * @return {String} id next selected cell in format [data-id="1:2"]
  */
-export function selectByKeys(keyCode, selection, $root) {
-  const $current = selection.current;
-  let { row, col } = $current.id();
-  let nextCell;
-  let id;
-
+export function nextSelectedCellId(keyCode, { row, col }) {
   switch (keyCode) {
     case KEY.TAB:
     case KEY.RIGHT:
-      id = `${row}:${col + 1}`;
-      nextCell = $root.find(`[data-id="${id}"]`);
+      col += 1;
       break;
 
     case KEY.ENTER:
     case KEY.DOWN:
-      id = `${row + 1}:${col}`;
-      nextCell = $root.find(`[data-id="${id}"]`);
+      row += 1;
       break;
 
     case KEY.UP:
       row = row - 1 < 0 ? 0 : row - 1;
-      id = `${row}:${col}`;
-      nextCell = $root.find(`[data-id="${id}"]`);
       break;
 
     case KEY.LEFT:
       col = col - 1 < 0 ? 0 : col - 1;
-      id = `${row}:${col}`;
-      nextCell = $root.find(`[data-id="${id}"]`);
       break;
 
     default:
-      return;
   }
-
-  selection.select(nextCell);
-  nextCell.focus();
+  return `[data-id="${row}:${col}"]`;
 }

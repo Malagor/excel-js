@@ -15,13 +15,25 @@ class Dom {
    * @param {string} html
    * @return {string | Dom} - элемент Dom или outerHTML
    */
-  html(html = '') {
+  html(html) {
     if (typeof html === 'string') {
       this.element.innerHTML = html;
       return this;
     }
 
     return this.element.outerHTML.trim();
+  }
+
+  text(text) {
+    if (typeof text === 'string') {
+      this.element.textContent = text;
+      return this;
+    }
+    if (this.element.tagName.toLowerCase() === 'input') {
+      return this.element.value.trim();
+    }
+
+    return this.element.textContent.trim();
   }
 
   clear() {
@@ -61,10 +73,12 @@ class Dom {
 
   addClass(className) {
     this.element.classList.add(className);
+    return this;
   }
 
   removeClass(className) {
     this.element.classList.remove(className);
+    return this;
   }
 
   id(parse = true) {
@@ -80,6 +94,7 @@ class Dom {
 
   focus() {
     this.element.focus();
+    return this;
   }
 
   find(selector) {
@@ -94,6 +109,7 @@ class Dom {
     Object.keys(styles).forEach(
       (prop) => (this.element.style[prop] = styles[prop]),
     );
+    return this;
   }
 
   /**
