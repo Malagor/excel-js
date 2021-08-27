@@ -78,6 +78,10 @@ class Dom {
     return this.data.id;
   }
 
+  focus() {
+    this.element.focus();
+  }
+
   find(selector) {
     return $(this.element.querySelector(selector));
   }

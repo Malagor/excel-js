@@ -5,6 +5,8 @@ import { $ } from '@core/Dom';
 import {
   findCellsForSelect,
   isCell,
+  isSelectKey,
+  selectByKeys,
   shouldResize,
 } from '@/components/table/table.functions';
 import { TableSelection } from '@/components/table/TableSelection';
@@ -15,7 +17,7 @@ export class Table extends ExcelComponent {
   constructor($root) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown'],
+      listeners: ['mousedown', 'keydown'],
     });
   }
 
@@ -50,6 +52,13 @@ export class Table extends ExcelComponent {
       } else {
         this.selection.select($el);
       }
+    }
+  }
+
+  onKeydown(event) {
+    if (isSelectKey(event.keyCode)) {
+      event.preventDefault();
+      selectByKeys(event.keyCode, this.selection, this.$root);
     }
   }
 }

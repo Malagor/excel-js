@@ -1,5 +1,14 @@
 import { range } from '@core/utils';
 
+const KEY = {
+  TAB: 9,
+  ENTER: 13,
+  UP: 38,
+  DOWN: 40,
+  LEFT: 37,
+  RIGHT: 39,
+};
+
 /**
  * Проверяет, есть ли у таргета возможность ресайза
  * @param {MouseEvent} event
@@ -42,4 +51,54 @@ export function findCellsForSelect($startCell, $endCell, $root) {
   }, []);
 
   return idx.map((id) => $root.find([`[data-id="${id}"]`]));
+}
+
+export function isSelectKey(keyCode) {
+  return Object.values(KEY).includes(keyCode);
+}
+
+/**
+ * Обрабатывает выделение ячейки с помощью клавиатуры
+ *
+ * @param {Number} keyCode
+ * @param {TableSelection} selection
+ * @param {Dom} $root
+ */
+export function selectByKeys(keyCode, selection, $root) {
+  const $current = selection.current;
+  let { row, col } = $current.id();
+  let nextCell;
+  let id;
+
+  switch (keyCode) {
+    case KEY.TAB:
+    case KEY.RIGHT:
+      id = `${row}:${col + 1}`;
+      nextCell = $root.find(`[data-id="${id}"]`);
+      break;
+
+    case KEY.ENTER:
+    case KEY.DOWN:
+      id = `${row + 1}:${col}`;
+      nextCell = $root.find(`[data-id="${id}"]`);
+      break;
+
+    case KEY.UP:
+      row = row - 1 < 0 ? 0 : row - 1;
+      id = `${row}:${col}`;
+      nextCell = $root.find(`[data-id="${id}"]`);
+      break;
+
+    case KEY.LEFT:
+      col = col - 1 < 0 ? 0 : col - 1;
+      id = `${row}:${col}`;
+      nextCell = $root.find(`[data-id="${id}"]`);
+      break;
+
+    default:
+      return;
+  }
+
+  selection.select(nextCell);
+  nextCell.focus();
 }
