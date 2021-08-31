@@ -10,6 +10,10 @@ export class Header extends ExcelComponent {
     });
   }
 
+  init() {
+    super.init();
+  }
+
   toHTML() {
     return `
       <input type="text" class="input" value="Новая таблица" />

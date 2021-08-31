@@ -39,3 +39,11 @@ export function range(start, end) {
     .fill('')
     .map((_, idx) => start + idx);
 }
+
+export function storage(key, data = null) {
+  if (data) {
+    localStorage.setItem(key, JSON.stringify(data));
+  } else {
+    return JSON.parse(localStorage.getItem(key));
+  }
+}

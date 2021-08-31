@@ -6,9 +6,21 @@ import { Header } from '@/components/header/Header';
 import { Table } from '@/components/table/Table';
 import { Formula } from '@/components/formula/Formula';
 import { Toolbar } from '@/components/toolbar/Toolbar';
+import { createStore } from '@core/createStore';
+import { rootReducer } from '@/redux/rootReducer';
+import state from '@/redux/state';
+import { storage } from '@core/utils';
+
+const store = createStore(rootReducer, state);
+
+store.subscribe((appStore) => {
+  console.log('App store', appStore);
+  storage('excel-store', appStore);
+});
 
 const excel = new Excel('#app', {
   components: [Header, Toolbar, Formula, Table],
+  store,
 });
 
 excel.render();

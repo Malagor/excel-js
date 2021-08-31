@@ -10,6 +10,7 @@ import {
   shouldResize,
 } from '@/components/table/table.functions';
 import { TableSelection } from '@/components/table/TableSelection';
+import * as actions from '@/redux/actionCreators';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';
@@ -41,15 +42,30 @@ export class Table extends ExcelComponent {
   selectCell($cell) {
     this.selection.select($cell);
     this.$emit('table:select', $cell);
+    this.$dispatch({ type: 'TEST' });
   }
 
   toHTML() {
-    return createTable(25);
+    const { rowState, colState } = this.store.getState();
+    return createTable(25, rowState, colState);
+  }
+
+  async resizeTable(event) {
+    try {
+      const { type, payload } = await resizeHandler(event, this.$root);
+      if (type === 'col') {
+        this.$dispatch(actions.colResize(payload));
+      } else {
+        this.$dispatch(actions.rowResize(payload));
+      }
+    } catch (e) {
+      console.warn('Не удалось изменить размер ячеек', e.message);
+    }
   }
 
   onMousedown(event) {
     if (shouldResize(event)) {
-      resizeHandler(event, this.$root);
+      this.resizeTable(event);
     } else if (isCell(event)) {
       const $el = $(event.target);
 
@@ -62,7 +78,7 @@ export class Table extends ExcelComponent {
 
         this.selection.selectGroup($cells);
       } else {
-        this.selection.select($el);
+        this.selectCell($el);
       }
       this.$emit('table:click', $el);
     }
