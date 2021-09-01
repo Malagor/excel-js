@@ -22,8 +22,10 @@ export class Formula extends ExcelComponent {
     this.$formula = this.$root.find('#formula');
 
     this.$on('table:select', this.changeFormula(this.$formula));
-    this.$on('table:input', this.changeFormula(this.$formula));
-    this.$on('table:click', this.changeFormula(this.$formula));
+
+    this.$subscribe((state) => {
+      this.$formula.text(state.currentText);
+    });
   }
 
   changeFormula = ($formula) => {

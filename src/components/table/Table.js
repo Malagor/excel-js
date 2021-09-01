@@ -33,6 +33,7 @@ export class Table extends ExcelComponent {
     this.selectCell(this.$root.find('[data-id="0:0"]'));
     this.$on('formula:input', (text) => {
       this.selection.current.text(text);
+      this.updateTextInStore(text);
     });
     this.$on('formula:done', () => {
       this.selection.current.focus();
@@ -42,12 +43,15 @@ export class Table extends ExcelComponent {
   selectCell($cell) {
     this.selection.select($cell);
     this.$emit('table:select', $cell);
-    this.$dispatch({ type: 'TEST' });
   }
 
   toHTML() {
-    const { rowState, colState } = this.store.getState();
-    return createTable(25, rowState, colState);
+    return createTable(25, this.store.getState());
+  }
+
+  updateTextInStore(text) {
+    const id = this.selection.current.id(false);
+    this.$dispatch(actions.changeText({ id, text }));
   }
 
   async resizeTable(event) {
@@ -76,7 +80,6 @@ export class Table extends ExcelComponent {
       } else {
         this.selectCell($el);
       }
-      this.$emit('table:click', $el);
     }
   }
 
@@ -94,6 +97,6 @@ export class Table extends ExcelComponent {
   }
 
   onInput(event) {
-    this.$emit('table:input', $(event.target));
+    this.updateTextInStore($(event.target).text());
   }
 }

@@ -1,6 +1,10 @@
 /**
  * @typedef State
  * @type {object}
+ * @property {Object} rowState
+ * @property {Object} colState
+ * @property {Object} dataState
+ * @property {Object} currentText
  */
 
 /**

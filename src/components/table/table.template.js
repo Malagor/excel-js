@@ -13,15 +13,17 @@ function getHeight(rowState, idx) {
   return rowState[idx] ? `${rowState[idx]}px` : `${DEFAULT_ROW_HEIGHT}px`;
 }
 
-function toCell(row) {
+function toCell(row, state) {
   return (data, col) => {
+    const id = `${row}:${col}`;
+
     return `
     <div class="cell" 
     contenteditable 
     style="width: ${data.width}"
     data-col=${col}
-    data-id=${row}:${col}    
-    ></div>
+    data-id=${id}    
+    >${state[id] || ''}</div>
   `;
   };
 }
@@ -71,11 +73,11 @@ function withWidthFrom(dataState) {
 /**
  * Создает таблицу указанного размера
  * @param {number} rowsCount - количество строк таблицы
- * @param {Object} rowState данные о высотах строк
- * @param {Object} colState данные о ширинах столбцов
+ * @param {State} state данные о высотах строк
  * @return {string}
  */
-export function createTable(rowsCount, rowState, colState) {
+export function createTable(rowsCount, state) {
+  const { rowState, colState, dataState } = state;
   const colsCount = CODES.Z - CODES.A + 1;
   const rows = [];
   const cols = new Array(colsCount)
@@ -91,7 +93,7 @@ export function createTable(rowsCount, rowState, colState) {
     const cells = new Array(colsCount)
       .fill('')
       .map(withWidthFrom(colState))
-      .map(toCell(row))
+      .map(toCell(row, dataState))
       .join('');
 
     rows.push(createRow(row + 1, cells, rowState));

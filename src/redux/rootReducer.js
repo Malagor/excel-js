@@ -14,6 +14,7 @@ import { ACTIONS } from '@/redux/actionCreators';
  * @return {State} new State
  */
 export function rootReducer(state, action) {
+  console.log('Action', action);
   switch (action.type) {
     case ACTIONS.TABLE_RESIZE: {
       const { type, data } = action.payload;
@@ -25,6 +26,19 @@ export function rootReducer(state, action) {
       return {
         ...state,
         [field]: newFieldState,
+      };
+    }
+
+    case ACTIONS.CHANGE_TEXT: {
+      const { id, text } = action.payload;
+
+      const newDataState = state.dataState
+        ? { ...state.dataState, [id]: text }
+        : { [id]: text };
+      return {
+        ...state,
+        currentText: action.payload.text,
+        dataState: newDataState,
       };
     }
 
