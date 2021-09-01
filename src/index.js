@@ -8,10 +8,10 @@ import { Formula } from '@/components/formula/Formula';
 import { Toolbar } from '@/components/toolbar/Toolbar';
 import { createStore } from '@core/createStore';
 import { rootReducer } from '@/redux/rootReducer';
-import state from '@/redux/state';
+import initialState from '@/redux/initialState';
 import { storage } from '@core/utils';
 
-const store = createStore(rootReducer, state);
+const store = createStore(rootReducer, initialState);
 
 store.subscribe((appStore) => {
   console.log('App store', appStore);

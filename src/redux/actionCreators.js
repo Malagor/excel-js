@@ -1,18 +1,11 @@
 export const ACTIONS = {
-  COL_RESIZE: 'COL_RESIZE',
-  ROW_RESIZE: 'ROW_RESIZE',
+  TABLE_RESIZE: 'TABLE_RESIZE',
 };
 
-export const colResize = (payload) => {
+// Action Creators
+export const tableResize = (payload) => {
   return {
-    type: ACTIONS.COL_RESIZE,
-    payload,
-  };
-};
-
-export const rowResize = (payload) => {
-  return {
-    type: ACTIONS.ROW_RESIZE,
+    type: ACTIONS.TABLE_RESIZE,
     payload,
   };
 };

@@ -56,13 +56,12 @@ export function resizeHandler(event, rootElement) {
         $resizer.css({ bottom: 0 });
       }
 
-      const indexRowOrCol =
-        type === 'col' ? $parent.data.col : $parent.data.row;
+      const id = $parent.data[type];
 
       resolve({
         type,
-        payload: {
-          [indexRowOrCol]: value,
+        data: {
+          [id]: value,
         },
       });
     };

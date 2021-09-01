@@ -14,24 +14,20 @@ import { ACTIONS } from '@/redux/actionCreators';
  * @return {State} new State
  */
 export function rootReducer(state, action) {
-  const { payload, type } = action;
-  switch (type) {
-    case ACTIONS.COL_RESIZE:
+  switch (action.type) {
+    case ACTIONS.TABLE_RESIZE: {
+      const { type, data } = action.payload;
+      // rowState or colState
+      const field = `${type}State`;
+      const newFieldState = state[field]
+        ? { ...state[field], ...data }
+        : { ...data };
       return {
         ...state,
-        colState: {
-          ...state.colState,
-          ...payload,
-        },
+        [field]: newFieldState,
       };
-    case ACTIONS.ROW_RESIZE:
-      return {
-        ...state,
-        rowState: {
-          ...state.rowState,
-          ...payload,
-        },
-      };
+    }
+
     default:
       return state;
   }

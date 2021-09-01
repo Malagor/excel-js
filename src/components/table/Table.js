@@ -52,12 +52,8 @@ export class Table extends ExcelComponent {
 
   async resizeTable(event) {
     try {
-      const { type, payload } = await resizeHandler(event, this.$root);
-      if (type === 'col') {
-        this.$dispatch(actions.colResize(payload));
-      } else {
-        this.$dispatch(actions.rowResize(payload));
-      }
+      const payload = await resizeHandler(event, this.$root);
+      this.$dispatch(actions.tableResize(payload));
     } catch (e) {
       console.warn('Не удалось изменить размер ячеек', e.message);
     }
