@@ -6,6 +6,8 @@
   position: relative;
   display: inline-block;
   color: rgba(0, 0, 0, .7);
+  border: 1px solid transparent;
+  border-radius: 3px;
 
   & i {
     font-size: 18px;
@@ -13,6 +15,7 @@
 
   &:active, &.active {
     color: $color;
+    border-color: $color;
   }
 
   &:hover {
