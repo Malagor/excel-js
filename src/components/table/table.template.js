@@ -1,8 +1,14 @@
-import { DEFAULT_COLUMN_WIDTH, DEFAULT_ROW_HEIGHT } from '@/constants';
+import {
+  DEFAULT_COLUMN_WIDTH,
+  DEFAULT_ROW_HEIGHT,
+  DEFAULT_STYLES,
+} from '@/constants';
+import { camelCaseToKebabCase } from '@core/utils';
+import { parse } from '@core/parse';
 
-const CODES = {
-  A: 65,
-  Z: 90,
+const CHAR_CODES = {
+  A: 'A'.charCodeAt(0),
+  Z: 'Z'.charCodeAt(0),
 };
 
 function getWidth(colState, idx) {
@@ -13,17 +19,34 @@ function getHeight(rowState, idx) {
   return rowState[idx] ? `${rowState[idx]}px` : `${DEFAULT_ROW_HEIGHT}px`;
 }
 
+function toInlineStyles(styleState, id) {
+  let styles = { ...DEFAULT_STYLES };
+
+  if (styleState[id]) {
+    styles = Object.assign(styles, styleState[id]);
+  }
+
+  return Object.keys(styles)
+    .map((key) => {
+      const dash = camelCaseToKebabCase(key);
+      return `${[dash]}:${styles[key]}`;
+    })
+    .join(';');
+}
+
 function toCell(row, state) {
+  const { dataState, styleState } = state;
   return (data, col) => {
     const id = `${row}:${col}`;
-
+    const styles = toInlineStyles(styleState, id);
     return `
     <div class="cell" 
-    contenteditable 
-    style="width: ${data.width}"
+    contenteditable
+    style="${styles}; width: ${data.width}"
     data-col=${col}
-    data-id=${id}    
-    >${state[id] || ''}</div>
+    data-id=${id}
+    data-value=${dataState[id] || ''}
+    >${parse(dataState[id] || '')}</div>
   `;
   };
 }
@@ -57,7 +80,7 @@ function createRow(info, content, rowState = {}) {
 }
 
 function toChar(_, idx) {
-  return String.fromCharCode(CODES.A + idx);
+  return String.fromCharCode(CHAR_CODES.A + idx);
 }
 
 function withWidthFrom(dataState) {
@@ -77,8 +100,8 @@ function withWidthFrom(dataState) {
  * @return {string}
  */
 export function createTable(rowsCount, state) {
-  const { rowState, colState, dataState } = state;
-  const colsCount = CODES.Z - CODES.A + 1;
+  const { rowState, colState } = state;
+  const colsCount = CHAR_CODES.Z - CHAR_CODES.A + 1;
   const rows = [];
   const cols = new Array(colsCount)
     .fill('')
@@ -93,7 +116,7 @@ export function createTable(rowsCount, state) {
     const cells = new Array(colsCount)
       .fill('')
       .map(withWidthFrom(colState))
-      .map(toCell(row, dataState))
+      .map(toCell(row, state))
       .join('');
 
     rows.push(createRow(row + 1, cells, rowState));

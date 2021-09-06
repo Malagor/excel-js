@@ -27,7 +27,7 @@ export class Formula extends ExcelComponent {
 
   changeFormula = ($formula) => {
     return ($cell) => {
-      $formula.text($cell.text());
+      $formula.text($cell.data.value);
     };
   };
 

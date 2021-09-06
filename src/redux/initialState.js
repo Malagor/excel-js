@@ -1,10 +1,17 @@
 import { storage } from '@core/utils';
+import { DEFAULT_TITLE } from '@/constants';
 
-const initialState = storage('excel-store') || {
+const defaultState = {
   colState: {},
   rowState: {},
-  dataState: {}, // {0:1}: 'ksndfkjsn'
+  dataState: {},
   currentText: '',
+  titleTable: DEFAULT_TITLE,
+  styleState: {},
 };
 
-export default initialState;
+const initialState = storage('excel-store')
+  ? { ...defaultState, ...storage('excel-store') }
+  : { ...defaultState };
+
+export default initialSta

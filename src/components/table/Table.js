@@ -11,6 +11,7 @@ import {
 } from '@/components/table/table.functions';
 import { TableSelection } from '@/components/table/TableSelection';
 import * as actions from '@/redux/actionCreators';
+import { parse } from '@core/parse';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';
@@ -31,12 +32,22 @@ export class Table extends ExcelComponent {
     super.init();
 
     this.selectCell(this.$root.find('[data-id="0:0"]'));
-    this.$on('formula:input', (text) => {
-      this.selection.current.text(text);
-      this.updateTextInStore(text);
+    this.$on('formula:input', (value) => {
+      console.log('formula:input', parse(value));
+      this.selection.current.attr('data-value', value).text(parse(value));
+      this.updateTextInStore(value);
     });
     this.$on('formula:done', () => {
       this.selection.current.focus();
+    });
+    this.$on('toolbar:applyStyle', (style) => {
+      this.selection.applyStyle(style);
+      this.$dispatch(
+        actions.changeStyle({
+          ids: this.selection.selectedIds,
+          style,
+        }),
+      );
     });
   }
 
@@ -50,7 +61,7 @@ export class Table extends ExcelComponent {
   }
 
   updateTextInStore(text) {
-    const id = this.selection.current.id(false);
+    const id = this.selection.current.id();
     this.$dispatch(actions.changeText({ id, text }));
   }
 
@@ -89,7 +100,7 @@ export class Table extends ExcelComponent {
     if (isSelectKey(keyCode) && !event.shiftKey) {
       event.preventDefault();
 
-      const id = this.selection.current.id();
+      const id = this.selection.current.id(true);
       const $nextCell = this.$root.find(nextSelectedCellId(keyCode, id));
 
       this.selectCell($nextCell);

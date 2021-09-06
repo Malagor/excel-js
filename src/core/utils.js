@@ -54,3 +54,20 @@ export function isEqual(a, b) {
   }
   return a === b;
 }
+
+export function camelCaseToKebabCase(camelCase) {
+  return camelCase.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+}
+
+export function debounce(fn, delay) {
+  let timeout;
+  return function (...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      fn(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, delay);
+  };
+}

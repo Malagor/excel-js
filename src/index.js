@@ -9,18 +9,19 @@ import { Toolbar } from '@/components/toolbar/Toolbar';
 import { createStore } from '@core/createStore';
 import { rootReducer } from '@/redux/rootReducer';
 import initialState from '@/redux/initialState';
-import { storage } from '@core/utils';
+import { debounce, storage } from '@core/utils';
 
 const store = createStore(rootReducer, initialState);
 
-store.subscribe((appStore) => {
+const stateListener = debounce((appStore) => {
   console.log('App store', appStore);
   storage('excel-store', appStore);
-});
+}, 500);
+
+store.subscribe(stateListener);
 
 const excel = new Excel('#app', {
   components: [Header, Toolbar, Formula, Table],
   store,
 });
 
-excel.render();

@@ -25,7 +25,7 @@ class Dom {
   }
 
   text(text) {
-    if (typeof text === 'string') {
+    if (typeof text !== 'undefined') {
       this.element.textContent = text;
       return this;
     }
@@ -60,7 +60,11 @@ class Dom {
   }
 
   closest(selector) {
-    return $(this.element.closest(selector));
+    const el = this.element.closest(selector);
+    if (el) {
+      return $(this.element.closest(selector));
+    }
+    return null;
   }
 
   getCoords() {
@@ -69,6 +73,14 @@ class Dom {
 
   get data() {
     return this.element.dataset;
+  }
+
+  attr(name, value) {
+    if (value) {
+      this.element.setAttribute(name, value);
+      return this;
+    }
+    return this.element.getAttribute(name);
   }
 
   addClass(className) {
@@ -81,7 +93,7 @@ class Dom {
     return this;
   }
 
-  id(parse = true) {
+  id(parse = false) {
     if (parse) {
       const parsed = this.element.dataset.id.split(':');
       return {
@@ -110,6 +122,13 @@ class Dom {
       (prop) => (this.element.style[prop] = styles[prop]),
     );
     return this;
+  }
+
+  getStyles(styles = []) {
+    return styles.reduce((res, s) => {
+      res[s] = this.element.style[s];
+      return res;
+    }, {});
   }
 
   /**

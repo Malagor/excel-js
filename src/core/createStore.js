@@ -5,6 +5,7 @@
  * @property {Object} colState
  * @property {Object} dataState
  * @property {Object} currentText
+ * @property {Object} styleState
  */
 
 /**

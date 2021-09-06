@@ -37,8 +37,8 @@ export function isCell(event) {
  * @return {Array<Dom>} возвращает массив ячеек которые попади в выделяемый диапазон
  */
 export function findCellsForSelect($startCell, $endCell, $root) {
-  const prev = $startCell.id();
-  const next = $endCell.id();
+  const prev = $startCell.id(true);
+  const next = $endCell.id(true);
 
   const rows = range(prev.row, next.row);
   const cols = range(prev.col, next.col);

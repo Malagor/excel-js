@@ -1,4 +1,4 @@
-import { ACTIONS } from '@/redux/actionCreators';
+import { ACTIONS } from '@/redux/actionTypes';
 
 /**
  * @typedef Action
@@ -20,29 +20,49 @@ export function rootReducer(state, action) {
       const { type, data } = action.payload;
       // rowState or colState
       const field = `${type}State`;
-      const newFieldState = state[field]
-        ? { ...state[field], ...data }
-        : { ...data };
       return {
         ...state,
-        [field]: newFieldState,
+        [field]: value(state, field, data),
       };
     }
 
     case ACTIONS.CHANGE_TEXT: {
       const { id, text } = action.payload;
-
-      const newDataState = state.dataState
-        ? { ...state.dataState, [id]: text }
-        : { [id]: text };
       return {
         ...state,
         currentText: action.payload.text,
-        dataState: newDataState,
+        dataState: value(state, 'dataState', { [id]: text }),
+      };
+    }
+
+    case ACTIONS.CHANGE_TITLE:
+      return {
+        ...state,
+        titleTable: action.payload,
+      };
+
+    case ACTIONS.APPLY_STYLE: {
+      const { ids, style } = action.payload;
+
+      const newStyles = ids.reduce(
+        (res, id) => {
+          res[id] = value(res, id, style);
+          return res;
+        },
+        { ...(state.styleState || {}) },
+      );
+
+      return {
+        ...state,
+        styleState: newStyles,
       };
     }
 
     default:
       return state;
   }
+}
+
+function value(state, field, payload) {
+  return state[field] ? { ...state[field], ...payload } : { ...payload };
 }

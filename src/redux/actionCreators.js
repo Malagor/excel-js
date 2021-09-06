@@ -1,9 +1,7 @@
-export const ACTIONS = {
-  TABLE_RESIZE: 'TABLE_RESIZE',
-  CHANGE_TEXT: 'CHANGE_TEXT',
-};
+import { ACTIONS } from '@/redux/actionTypes';
 
 // Action Creators
+
 export const tableResize = (payload) => {
   return {
     type: ACTIONS.TABLE_RESIZE,
@@ -14,6 +12,20 @@ export const tableResize = (payload) => {
 export const changeText = (payload) => {
   return {
     type: ACTIONS.CHANGE_TEXT,
+    payload,
+  };
+};
+
+export const changeTitle = (payload) => {
+  return {
+    type: ACTIONS.CHANGE_TITLE,
+    payload,
+  };
+};
+
+export const changeStyle = (payload) => {
+  return {
+    type: ACTIONS.APPLY_STYLE,
     payload,
   };
 };
