@@ -25,3 +25,4 @@ const excel = new Excel('#app', {
   store,
 });
 
+excel.render();

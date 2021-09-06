@@ -14,4 +14,4 @@ const initialState = storage('excel-store')
   ? { ...defaultState, ...storage('excel-store') }
   : { ...defaultState };
 
-export default initialSta
+export default initialState;

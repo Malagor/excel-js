@@ -96,7 +96,7 @@ function withWidthFrom(dataState) {
 /**
  * Создает таблицу указанного размера
  * @param {number} rowsCount - количество строк таблицы
- * @param {State} state данные о высотах строк
+ * @param {State} state Стейт приложения
  * @return {string}
  */
 export function createTable(rowsCount, state) {
