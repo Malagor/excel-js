@@ -149,7 +149,7 @@ class Dom {
    * @return {Dom}
    */
   off(eventType, callback) {
-    this.element.removeDOMListener(eventType, callback);
+    this.element.removeEventListener(eventType, callback);
     return this;
   }
 }
