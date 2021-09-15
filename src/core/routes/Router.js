@@ -26,18 +26,18 @@ export class Router {
   }
 
   changePageHandler() {
-    const path = ActiveRoute.pathWithoutParams;
-    if (this.routes[path]) {
-      if (this.page) {
-        this.page.destroy();
-      }
-      this.$placeholder.clear();
-
-      const Page = this.routes[path];
-      this.page = new Page(ActiveRoute.param);
-
-      this.$placeholder.append(this.page.getRoot());
-      this.page.afterRender();
+    if (this.page) {
+      this.page.destroy();
     }
+
+    const Page = ActiveRoute.path.includes('excel')
+      ? this.routes.excel
+      : this.routes.dashboard;
+
+    this.$placeholder.clear();
+
+    this.page = new Page(ActiveRoute.param);
+    this.$placeholder.append(this.page.getRoot());
+    this.page.afterRender();
   }
 }

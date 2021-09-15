@@ -1,4 +1,3 @@
-import { storage } from '@core/utils';
 import { DEFAULT_TITLE } from '@/constants';
 
 const defaultState = {
@@ -10,8 +9,10 @@ const defaultState = {
   styleState: {},
 };
 
-const initialState = storage('excel-store')
-  ? { ...defaultState, ...storage('excel-store') }
-  : { ...defaultState };
+export function normalizeInitialState(state, id) {
+  if (state) {
+    return { ...defaultState, ...state, id };
+  }
 
-export default initialState;
+  return { ...defaultState, id };
+}

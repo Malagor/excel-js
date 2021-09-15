@@ -71,3 +71,17 @@ export function debounce(fn, delay) {
     timeout = setTimeout(later, delay);
   };
 }
+function addPrevZero(num) {
+  return num < 10 ? `0${num}` : num;
+}
+
+export function formatDate(num) {
+  const date = new Date(num);
+  const day = addPrevZero(date.getDate());
+  const month = addPrevZero(date.getMonth());
+  const year = date.getFullYear();
+  const hh = addPrevZero(date.getHours());
+  const mm = addPrevZero(date.getMinutes());
+  const ss = addPrevZero(date.getSeconds());
+  return `${day}.${month}.${year} - ${hh}:${mm}:${ss}`;
+}

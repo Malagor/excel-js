@@ -9,16 +9,25 @@ import { Excel } from '@/components/excel/Excel';
 
 import { createStore } from '@core/createStore';
 import { rootReducer } from '@/redux/rootReducer';
-import initialState from '@/redux/initialState';
+import { normalizeInitialState } from '@/redux/initialState';
+
+function storageName(param) {
+  return 'excel:' + param;
+}
 
 export class ExcelPage extends Page {
   getRoot() {
-    console.log('params', this.params);
-    const store = createStore(rootReducer, initialState);
+    const params = this.params ? this.params : Date.now().toString();
+    const state = storage(storageName(params));
+
+    const store = createStore(
+      rootReducer,
+      normalizeInitialState(state, params),
+    );
 
     const stateListener = debounce((appStore) => {
       console.log('App store', appStore);
-      storage('excel-store', appStore);
+      storage(storageName(params), appStore);
     }, 500);
 
     store.subscribe(stateListener);

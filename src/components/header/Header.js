@@ -8,7 +8,7 @@ export class Header extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Header',
-      listeners: ['input'],
+      listeners: ['input', 'click'],
       ...options,
     });
   }
@@ -23,10 +23,10 @@ export class Header extends ExcelComponent {
       <input type="text" class="input" id="table-title" value="${titleTable}" />
 
       <div>
-        <div class="button">
+        <div class="button" data-action="delete">
           <i class="material-icons">delete</i>
         </div>
-        <div class="button">
+        <div class="button" data-action="exit">
           <i class="material-icons">exit_to_app</i>
         </div>
       </div>
@@ -36,5 +36,20 @@ export class Header extends ExcelComponent {
   onInput(event) {
     const $target = $(event.target);
     this.$dispatch(changeTitle($target.text()));
+  }
+
+  onClick(event) {
+    console.log('onClick');
+    const $target = $(event.target).closest('[data-action]');
+
+    if ($target.data.action) {
+      const action = $target.data.action;
+      console.log(action);
+
+      if (action === 'exit') {
+        console.log('exit');
+        document.location.href = '/';
+      }
+    }
   }
 }
